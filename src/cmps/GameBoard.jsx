@@ -10,10 +10,10 @@ export default function GameBoard() {
 	const [choiceOne, setChoiceOne] = useState(null);
 	const [choiceTwo, setChoiceTwo] = useState(null);
 	const [player, setPlayer] = useState(1);
-    const [scoreOne, setScoreOne] = useState(0);
+	const [scoreOne, setScoreOne] = useState(0);
 	const [scoreTwo, setScoreTwo] = useState(0);
 
-    const incrementScore = (player) => {
+	const incrementScore = (player) => {
 		if (player) {
 			setScoreOne((prevScore) => prevScore + 1);
 		} else {
@@ -37,7 +37,7 @@ export default function GameBoard() {
 	useEffect(() => {
 		if (choiceOne && choiceTwo) {
 			if (choiceOne.imgId === choiceTwo.imgId) {
-				increaseCounter(player);
+				incrementScore(player);
 				resetTurn();
 			} else {
 				setTimeout(() => {
