@@ -4,6 +4,8 @@ import { React, useState, useEffect } from 'react';
 
 import CardList from './CardList';
 import Scoreboard from './Scoreboard';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function GameBoard() {
 	const [cards, setCards] = useState([]);
@@ -14,7 +16,8 @@ export default function GameBoard() {
 	const [scoreTwo, setScoreTwo] = useState(0);
 
 	const incrementScore = (player) => {
-		if (player) {
+		if (player === 1) {
+			console.log(player);
 			setScoreOne((prevScore) => prevScore + 1);
 		} else {
 			setScoreTwo((prevScore) => prevScore + 1);
@@ -28,9 +31,10 @@ export default function GameBoard() {
 
 	useEffect(() => {
 		starterPlayer();
-	});
+	}, []);
 
 	const switchPlayer = () => {
+		console.log(player);
 		setPlayer((prevTurn) => (prevTurn === 1 ? 2 : 1));
 	};
 
@@ -49,21 +53,34 @@ export default function GameBoard() {
 							return card;
 						})
 					);
+					switchPlayer();
 					resetTurn();
 				}, 1000);
 			}
 		}
-		switchPlayer();
 	}, [choiceOne, choiceTwo]);
 
 	const resetTurn = () => {
+		checkWinner();
 		setChoiceOne(null);
 		setChoiceTwo(null);
 	};
 
+	const checkWinner = () => {
+		const unmatchedCards = cards.filter((card) => !card.isVisible);
+		if (unmatchedCards.length === 0) {
+			if (scoreOne > scoreTwo) {
+				toast(`Player 1 won the game with ${scoreOne} points!`);
+			} else if (scoreTwo > scoreOne) {
+				toast(`Player 2 won the game with ${scoreTwo} points!`);
+			} else if (scoreOne === scoreTwo) {
+				toast('The game is a tie!');
+			}
+		}
+	};
+
 	useEffect(() => {
 		const cardsArr = getCardsArr();
-		console.log(cardsArr);
 		setChoiceOne(null);
 		setChoiceTwo(null);
 		setCards(cardsArr);
@@ -72,7 +89,7 @@ export default function GameBoard() {
 	const getCardsArr = () => {
 		const arrCards = [];
 		let counterId = 0;
-		for (let i = 0; i < 16; i++) {
+		for (let i = 0; i < 4; i++) {
 			counterId++;
 			arrCards.push({
 				id: counterId,
@@ -117,6 +134,7 @@ export default function GameBoard() {
 
 	return (
 		<div className="game-board">
+			<ToastContainer />
 			<p>Current Turn: Player {player}</p>
 			{/* <button onClick={Restart}>Restart Game</button> */}
 			<Scoreboard scoreOne={scoreOne} scoreTwo={scoreTwo} />

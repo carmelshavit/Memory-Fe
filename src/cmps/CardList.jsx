@@ -4,8 +4,6 @@ import React from 'react';
 import CardPreview from './CardPreview';
 
 export default function CardList({ cards, flipCard }) {
-	console.log(cards);
-
 	return (
 		<>
 			<div className="card-list">
